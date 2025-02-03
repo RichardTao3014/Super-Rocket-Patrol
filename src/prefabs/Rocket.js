@@ -32,6 +32,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
         if(this.y <= borderUISize * 3 + borderPadding) {
             this.isFiring = false
             this.y = game.config.height - borderUISize - borderPadding
+            // 仅当游戏未结束时减少时间
+            if (!this.scene.gameOver) {
+                this.scene.clock.delay -= 3000; // 减少 3 秒
+            }
             //this.reset();
         }
     }
@@ -40,9 +44,6 @@ class Rocket extends Phaser.GameObjects.Sprite {
         reset() {
             this.isFiring = false
             this.y = game.config.height - borderUISize - borderPadding
-            // 仅当游戏未结束时减少时间
-            if (!this.scene.gameOver) {
-                this.scene.clock.delay -= 3000; // 减少 3 秒
-            }
+            
         }
   }
