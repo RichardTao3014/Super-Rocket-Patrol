@@ -8,8 +8,15 @@ class Rocket extends Phaser.GameObjects.Sprite {
       this.isFiring = false      // track rocket's firing status
       this.moveSpeed = 2         // pixels per frame
       this.sfxShot = scene.sound.add('sfx-shot')
+      this.sfxreset = scene.sound.add('sfx-reset')
     }
 
+    fire(){
+        if(this.isFiring == false){
+            this.sfxShot.play()
+        }
+        this.isFiring = true
+    }
     update() {
         // left/right movement
         if(!this.isFiring) {
@@ -21,8 +28,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         }
         // fire button
         if(Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
-            this.isFiring = true
-            this.sfxShot.play()
+            this.fire();
         }
         // if fired, move up
         if(this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
@@ -32,11 +38,8 @@ class Rocket extends Phaser.GameObjects.Sprite {
         if(this.y <= borderUISize * 3 + borderPadding) {
             this.isFiring = false
             this.y = game.config.height - borderUISize - borderPadding
-            // 仅当游戏未结束时减少时间
-            if (!this.scene.gameOver) {
-                this.scene.clock.delay -= 3000; // 减少 3 秒
-            }
-            //this.reset();
+            this.scene.clock.elapsed += 3000; // 增加已用时间（等于减少剩余时间）
+                this.sfxreset.play();
         }
     }
 
